@@ -3,12 +3,15 @@ package net.richardmarston;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 
-@WebService
-public class EndpointImplementation  {
+@WebService (endpointInterface = "net.richardmarston.Interface")
+public class EndpointImplementation implements Interface {
 
+    String last = "";
     @WebMethod(operationName="getHelloWorld")
-	public String sayHello(String name) {
-		return "Hello, Welcom to jax-ws " + name;
-	}
-
+	@Override
+    public String getHelloWorld(String name) {
+        String current = last;
+        last = name;
+        return "The last one you sent was: " + current;
+    }
 }
