@@ -12,9 +12,9 @@ import javax.jws.soap.SOAPBinding.Style;
 //Service Endpoint Interface
 @WebService
 @SOAPBinding(style = Style.RPC)
-public interface Interface{
+public interface ChessClientInterface {
 
-	@WebMethod String getHelloWorld(String name);
+	@WebMethod String startNewGame();
 
 }
 
