@@ -3,12 +3,14 @@ package net.richardmarston;
 import java.io.*;
 
 import static java.lang.Thread.sleep;
+import org.apache.log4j.Logger;
 
 /**
  * Created by rich on 23/03/15.
  */
 public class ChessEngineComms {
 
+    static Logger logger = Logger.getLogger(ChessEngineComms.class);
     public static final int TIMEOUT = 3000;
     public String getResultOfLastCommand() {
         return resultOfLastCommand;
@@ -20,6 +22,7 @@ public class ChessEngineComms {
     Process p = null;
 
     public ChessEngineComms() {
+        logger.info("I'M MAKING A LOG ENTRY!");
         ProcessBuilder pb = new ProcessBuilder()
         .command("/usr/local/bin/gnuchess", "--manual", "--xboard")
         .redirectErrorStream(true);
@@ -63,6 +66,7 @@ public class ChessEngineComms {
                     // successful read!
                     return true;
                 }
+                contextSwitch();
                 now = System.currentTimeMillis();
             }
             return false;

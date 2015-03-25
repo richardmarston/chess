@@ -2,10 +2,9 @@
 import net.richardmarston.ChessEngineComms;
 import org.junit.*;
 import org.junit.Test;
-
+import static org.junit.Assert.*;
 import java.lang.System;
 
-import static org.junit.Assert.*;
 
 public class ChessEngineCommsTest {
 
