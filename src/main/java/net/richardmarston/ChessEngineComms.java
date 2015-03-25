@@ -7,7 +7,7 @@ import static java.lang.Thread.sleep;
 /**
  * Created by rich on 23/03/15.
  */
-public class GnuChessComms {
+public class ChessEngineComms {
 
     public static final int TIMEOUT = 3000;
     public String getResultOfLastCommand() {
@@ -19,7 +19,7 @@ public class GnuChessComms {
     BufferedWriter writer = null;
     Process p = null;
 
-    public GnuChessComms() {
+    public ChessEngineComms() {
         ProcessBuilder pb = new ProcessBuilder()
         .command("/usr/local/bin/gnuchess", "--manual", "--xboard")
         .redirectErrorStream(true);
