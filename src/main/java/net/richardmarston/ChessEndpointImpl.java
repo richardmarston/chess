@@ -6,9 +6,17 @@ import javax.jws.WebMethod;
 @WebService (endpointInterface = "net.richardmarston.ChessClientInterface")
 public class ChessEndpointImpl implements ChessClientInterface {
 
-    @WebMethod(operationName="startNewGame")
+    ChessEngineComms engine = null;
+
+    @WebMethod(operationName="startGame")
 	@Override
     public String startNewGame() {
+        if (engine != null) {
+            engine.sendCommand("new");
+        }
+        else {
+            engine = new ChessEngineComms();
+        }
         return "New game ready.";
     }
 }
