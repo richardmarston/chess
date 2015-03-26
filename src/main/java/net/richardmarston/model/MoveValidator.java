@@ -1,4 +1,4 @@
-package net.richardmarston;
+package net.richardmarston.model;
 
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindingResult;
@@ -17,9 +17,9 @@ public class MoveValidator {
     }
 
     public void validate(Move move, BindingResult result) {
-        logger.debug("Move attempted: "+ move.getCommand());
+        logger.debug("Move attempted: " + move.getCommand());
         comms.sendCommand(move.getCommand());
-        logger.debug("Result was: "+comms.getResultOfLastCommand());
+        logger.debug("Result was: " + comms.getResultOfLastCommand());
         if (comms.getResultOfLastCommand().contains("Invalid")) {
             result.addError(new ObjectError("Move", "Invalid move requested."));
         }

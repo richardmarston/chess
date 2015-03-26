@@ -1,5 +1,8 @@
 package net.richardmarston;
 
+import net.richardmarston.model.ChessEngineComms;
+import net.richardmarston.model.Move;
+import net.richardmarston.model.MoveValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.BindingResult;

@@ -1,4 +1,4 @@
-package net.richardmarston;
+package net.richardmarston.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,19 +7,18 @@ import java.util.stream.IntStream;
 /**
  * Created by rich on 25/03/15.
  */
-public class Move {
+public class Board {
 
-    private String command;
     ArrayList<ArrayList<String>> board;
 
-    public ArrayList<ArrayList<String>> getBoard() {
+    public ArrayList<ArrayList<String>> getBoardAsStrings() {
         return board;
     }
 
-    public Move() {
+    public Board() {
 
         board = new ArrayList<ArrayList<String>>();
-        IntStream.range(0, 7).forEach(
+        IntStream.range(0, 8).forEach(
 	        nbr -> board.add(new ArrayList<String>())
         );
 
@@ -35,11 +34,4 @@ public class Move {
         });
     }
 
-    public String getCommand() {
-        return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
 }

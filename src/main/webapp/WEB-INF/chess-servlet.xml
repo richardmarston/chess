@@ -14,9 +14,9 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <bean id="gameService" class="net.richardmarston.GameService"/>
-    <bean id="chessEngineComms" class="net.richardmarston.ChessEngineComms"/>
-    <bean id="moveValidator" class="net.richardmarston.MoveValidator">
+    <bean id="gameService" class="net.richardmarston.model.GameService"/>
+    <bean id="chessEngineComms" class="net.richardmarston.model.ChessEngineComms"/>
+    <bean id="moveValidator" class="net.richardmarston.model.MoveValidator">
         <constructor-arg ref="chessEngineComms" />
     </bean>
 

@@ -1,9 +1,10 @@
 package net.richardmarston;
 
+import net.richardmarston.model.ChessEngineComms;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import java.lang.System;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;

@@ -1,4 +1,4 @@
-package net.richardmarston;
+package net.richardmarston.model;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class ChessEngineComms {
     }
 
     public void sendCommand(String command, Integer responseLines) {
-        logger.debug("Sending command: "+command);
+        logger.debug("Sending command: " + command);
         try {
             writer.write(command + "\n");
             writer.flush();
