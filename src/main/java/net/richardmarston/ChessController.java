@@ -30,8 +30,8 @@ public class ChessController{
     @RequestMapping(method = RequestMethod.GET)
     public String requestChessForm(ModelMap model) {
 
-        model.addAttribute("message", "Hello Spring MVC Framework!");
         Move move = new Move();
+        model.addAttribute("board", move.getBoard());
         move.setCommand("changeme");
         model.put("move", move);
         return "chess"; // will map to chess.jsp
