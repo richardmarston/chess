@@ -24,15 +24,12 @@ public class MoveValidatorTest {
     }
 
     @Test
-    public void validatorSendsCommandAwaitsResponseAndReturnsReply() {
+    public void validatorSendsCommandAndReturnsReply() {
         Move move = new Move();
-        move.setCommand("test command");
-        String expectedResponse = "that command isn't right";
+        String expectedResponse = "test command";
+        move.setCommand(expectedResponse);
         when(mockChessEngineComms.getResultOfLastCommand()).thenReturn(expectedResponse);
-        String actualResponse = moveValidator.validate(move, mockBindingResult);
+        moveValidator.validate(move, mockBindingResult);
         verify(mockChessEngineComms).sendCommand(anyString());
-        verify(mockChessEngineComms).waitForResponse(anyLong());
-        assertTrue(expectedResponse.equals(actualResponse));
-
     }
 }

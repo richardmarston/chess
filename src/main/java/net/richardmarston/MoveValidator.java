@@ -1,8 +1,8 @@
 package net.richardmarston;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 /**
  * Created by rich on 25/03/15.
@@ -16,11 +16,12 @@ public class MoveValidator {
         comms=cec;
     }
 
-    public String validate(Move move, BindingResult result) {
-        logger.info("Move attempted: "+ move.getCommand());
+    public void validate(Move move, BindingResult result) {
+        logger.debug("Move attempted: "+ move.getCommand());
         comms.sendCommand(move.getCommand());
-        comms.waitForResponse(ChessEngineComms.TIMEOUT);
-        logger.info("Result was: "+comms.getResultOfLastCommand());
-        return comms.getResultOfLastCommand();
+        logger.debug("Result was: "+comms.getResultOfLastCommand());
+        if (comms.getResultOfLastCommand().contains("Invalid")) {
+            result.addError(new ObjectError("Move", "Invalid move requested."));
+        }
     }
 }

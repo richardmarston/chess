@@ -1,6 +1,7 @@
 package net.richardmarston;
 
 import java.io.*;
+import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
 import org.apache.log4j.Logger;
@@ -11,65 +12,84 @@ import org.apache.log4j.Logger;
 public class ChessEngineComms {
 
     static Logger logger = Logger.getLogger(ChessEngineComms.class);
-    public static final int TIMEOUT = 3000;
-    public String getResultOfLastCommand() {
-        return resultOfLastCommand;
-    }
-    String resultOfLastCommand;
+    private static final int TIMEOUT = 3000;
+    ArrayList<String> resultOfLastCommand;
     InputStream readInputStream = null;
     BufferedReader reader = null;
     BufferedWriter writer = null;
-    Process p = null;
+    Process engineProcess = null;
+
+    public String getResultOfLastCommand() {
+        return resultOfLastCommand.get(0);
+    }
+
+    public ArrayList<String> getCurrentBoard() {
+        sendCommand("show board", 10);
+        return resultOfLastCommand;
+    }
 
     public ChessEngineComms() {
-        logger.info("I'M MAKING A LOG ENTRY!");
+        resultOfLastCommand = new ArrayList<String>();
+        logger.debug("Starting new chess engine process.");
         ProcessBuilder pb = new ProcessBuilder()
         .command("/usr/local/bin/gnuchess", "--manual", "--xboard")
         .redirectErrorStream(true);
         try
         {
-            p = pb.start();
-            readInputStream = p.getInputStream();
-            OutputStream outputStream = p.getOutputStream();
+            engineProcess = pb.start();
+            readInputStream = engineProcess.getInputStream();
+            OutputStream outputStream = engineProcess.getOutputStream();
             reader = new BufferedReader (new InputStreamReader(readInputStream));
             writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+            waitForResponse(1);
         }
         catch (java.io.IOException ioe) {
             System.out.print(ioe.getMessage());
         }
-        finally {
-        }
     }
 
     public void close() {
-        p.destroy();
+        logger.debug("Shutting down engine.");
+        try {
+            engineProcess.destroy();
+        }
+        catch (NullPointerException npe) {
+
+        }
     }
 
     public void sendCommand(String command) {
+        sendCommand(command, 1);
+    }
+
+    public void sendCommand(String command, Integer responseLines) {
+        logger.debug("Sending command: "+command);
         try {
             writer.write(command + "\n");
+            writer.flush();
             writer.flush();
         }
         catch (java.io.IOException ioe) {
             System.out.print(ioe.getMessage());
         }
-        contextSwitch();
-        waitForResponse(3000);
+        waitForResponse(responseLines);
     }
 
-    public boolean waitForResponse(long timeoutInMilliseconds) {
+    private boolean waitForResponse(Integer lines) {
+        resultOfLastCommand.clear();
         try {
-            long now, then;
-            now = then = System.currentTimeMillis();
-            while (now - then < timeoutInMilliseconds) {
-                if ((readInputStream.available() > 0) && ((resultOfLastCommand = reader.readLine()) != null)) {
+            String nextLine="uninitialized";
+            while (true) {
+
+                if ((nextLine = reader.readLine()) != null) {
                     // successful read!
-                    return true;
+                    resultOfLastCommand.add(nextLine);
+                    if (0 >= --lines) {
+                        return true;
+                    }
                 }
-                contextSwitch();
-                now = System.currentTimeMillis();
+                giveEngineProcessingTime();
             }
-            return false;
         }
         catch (IOException ioe) {
             System.out.print(ioe.getMessage());
@@ -77,9 +97,9 @@ public class ChessEngineComms {
         }
     }
 
-    private void contextSwitch(){
+    private void giveEngineProcessingTime(){
         try {
-            sleep(0);
+            sleep(50);
         }
         catch (InterruptedException e) {
 
