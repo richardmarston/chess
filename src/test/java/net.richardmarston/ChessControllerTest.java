@@ -1,10 +1,7 @@
 package net.richardmarston;
 
 import net.richardmarston.controller.ChessController;
-import net.richardmarston.model.Board;
-import net.richardmarston.model.GameService;
-import net.richardmarston.model.Move;
-import net.richardmarston.model.MoveValidator;
+import net.richardmarston.model.*;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +24,7 @@ public class ChessControllerTest {
     private BindingResult mockBindingResult;
     private SessionStatus mockSessionStatus;
     private GameService mockGameService;
+    private ChessEngineComms mockChessEngineComms;
 
     @Before
     public void setup() {
@@ -34,8 +32,8 @@ public class ChessControllerTest {
         mockBindingResult = mock(BindingResult.class);
         mockSessionStatus = mock(SessionStatus.class);
         mockGameService = mock(GameService.class);
-        controller = new ChessController(mockMoveValidator, mockGameService);
-
+        mockChessEngineComms = mock(ChessEngineComms.class);
+        controller = new ChessController(mockMoveValidator, mockGameService, mockChessEngineComms);
     }
 
     @Test

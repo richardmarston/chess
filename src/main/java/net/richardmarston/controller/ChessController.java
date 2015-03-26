@@ -1,9 +1,6 @@
 package net.richardmarston.controller;
 
-import net.richardmarston.model.GameService;
-import net.richardmarston.model.Move;
-import net.richardmarston.model.MoveValidator;
-import net.richardmarston.model.Board;
+import net.richardmarston.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,11 +25,16 @@ public class ChessController {
 
     private GameService gameService;
     private MoveValidator moveValidator;
+    private ChessEngineComms comms;
+    private Board board;
 
     @Autowired
-    public ChessController(MoveValidator validator, GameService service) {
+    public ChessController(MoveValidator validator, GameService service, ChessEngineComms cec) {
         moveValidator = validator;
         gameService = service;
+        comms = cec;
+        board = new Board();
+        board.setState(comms.getCurrentBoard());
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -57,9 +59,11 @@ public class ChessController {
             return "chess";
         } else {
             logger.info("Move complete: "+move.getCommand());
+
             this.gameService.saveMove(move);
             move.setError(false);
             move.setMessage("Enter your move!");
+            board.setState(comms.getCurrentBoard());
             model.addAttribute("board", getBoard());
             status.setComplete();
             return "chess";
@@ -67,6 +71,6 @@ public class ChessController {
     }
 
     private ArrayList<ArrayList<String>> getBoard() {
-        return new Board().getBoardAsStrings();
+        return board.getBoardAsStrings();
     }
 }
