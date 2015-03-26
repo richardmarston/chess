@@ -1,6 +1,9 @@
 package net.richardmarston.model;
 
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -9,6 +12,7 @@ import java.util.stream.IntStream;
  */
 public class Board {
 
+    static Logger logger = Logger.getLogger(Board.class);
     ArrayList<ArrayList<String>> board;
 
     public ArrayList<ArrayList<String>> getBoardAsStrings() {
@@ -21,17 +25,37 @@ public class Board {
         IntStream.range(0, 8).forEach(
 	        nbr -> board.add(new ArrayList<String>())
         );
-
-        board.forEach(list->{
-            list.add(new String("a"));
-            list.add(new String("b"));
-            list.add(new String("a"));
-            list.add(new String("c"));
-            list.add(new String("a"));
-            list.add(new String("a"));
-            list.add(new String("a"));
-            list.add(new String("a"));
-        });
     }
 
+    /*
+                "",
+                "white  KQkq",
+                "r n b q k b n r ",
+                "p p p p p p p p ",
+                ". . . . . . . . ",
+                ". . . . . . . . ",
+                ". . . . . . . . ",
+                ". . . . . . . . ",
+                "P P P P P P P P ",
+                "R N B Q K B N R "
+     */
+    public void setState(ArrayList<String> newBoard) {
+        Iterator<ArrayList<String>> iterator = board.iterator();
+        try {
+            newBoard.remove(0);
+            newBoard.remove(0); // todo: current player needs to be extracted from this field
+            newBoard.forEach(line -> {
+                ArrayList<String> boardRow = iterator.next();
+                boardRow.clear();
+                IntStream.range(0, 8).forEach(
+                        nbr -> {
+                            boardRow.add(line.substring((2 * nbr), (2 * nbr)+1));
+                        }
+                );
+            });
+        }
+        catch (StringIndexOutOfBoundsException sioobe) {
+            logger.error("Failed to setState from board arrayList: "+newBoard);
+        }
+    }
 }
