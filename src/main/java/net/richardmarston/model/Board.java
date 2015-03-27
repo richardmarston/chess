@@ -44,6 +44,7 @@ public class Board {
         try {
             newBoard.remove(0);
             newBoard.remove(0); // todo: current player needs to be extracted from this field
+            newBoard.remove(newBoard.size()-1);
             newBoard.forEach(line -> {
                 ArrayList<String> boardRow = iterator.next();
                 boardRow.clear();

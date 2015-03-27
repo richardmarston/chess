@@ -24,7 +24,7 @@ public class ChessEngineComms {
     }
 
     public ArrayList<String> getCurrentBoard() {
-        sendCommand("show board", 10);
+        sendCommand("show board", 11);
         return resultOfLastCommand;
     }
 
