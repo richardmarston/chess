@@ -33,6 +33,7 @@ public class ChessControllerTest {
         mockSessionStatus = mock(SessionStatus.class);
         mockGameService = mock(GameService.class);
         mockChessEngineComms = mock(ChessEngineComms.class);
+        when(mockChessEngineComms.getCurrentBoard()).thenReturn(BoardSamples.getStartingBoard());
         controller = new ChessController(mockMoveValidator, mockGameService, mockChessEngineComms);
     }
 
