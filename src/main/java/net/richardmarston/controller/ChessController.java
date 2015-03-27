@@ -52,7 +52,6 @@ public class ChessController {
     public String processCreationForm(ModelMap model, @ModelAttribute("move") Move move, BindingResult result, SessionStatus status) {
         moveValidator.validate(move, result);
         if (result.hasErrors()) {
-            move.setError(true);
             move.setMessage("Invalid move. Please try again!");
             model.addAttribute("move", move);
             model.addAttribute("board", getBoard());
@@ -61,7 +60,6 @@ public class ChessController {
             logger.info("Move complete: "+move.getCommand());
 
             this.gameService.saveMove(move);
-            move.setError(false);
             move.setMessage("Enter your move!");
             board.setState(comms.getCurrentBoard());
             model.addAttribute("board", getBoard());

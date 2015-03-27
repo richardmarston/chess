@@ -61,16 +61,6 @@ public class ChessControllerTest {
     }
 
     @Test
-    public void processCreationFormClearsErrorIfValidationPasses() {
-        Board board = new Board();
-        when(mockBindingResult.hasErrors()).thenReturn(false);
-        assertFalse(mockBindingResult.hasErrors());
-        Move mockMove = mock(Move.class);
-        String s = controller.processCreationForm(new ModelMap(), mockMove, mockBindingResult, mockSessionStatus );
-        verify(mockMove).setError(false);
-    }
-
-    @Test
     public void processCreationFormDoesNotCallSaveMoveIfValidationFails() {
         Board board = new Board();
         when(mockBindingResult.hasErrors()).thenReturn(true);
@@ -78,14 +68,5 @@ public class ChessControllerTest {
         String s = controller.processCreationForm(new ModelMap(), new Move(), mockBindingResult, mockSessionStatus );
         verify(mockMoveValidator).validate(any(Move.class), any(BindingResult.class));
         verify(mockGameService, times(0)).saveMove(any(Move.class));
-    }
-
-    public void processCreationFormCallsSetsErrorIfValidationFails() {
-        Board board = new Board();
-        when(mockBindingResult.hasErrors()).thenReturn(true);
-        assertTrue(mockBindingResult.hasErrors());
-        Move mockMove = mock(Move.class);
-        String s = controller.processCreationForm(new ModelMap(), mockMove, mockBindingResult, mockSessionStatus );
-        verify(mockMove).setError(true);
     }
 }

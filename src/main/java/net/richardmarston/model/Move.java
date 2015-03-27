@@ -4,8 +4,8 @@ package net.richardmarston.model;
  * Created by rich on 26/03/15.
  */
 public class Move {
-    private String command;
-    private Boolean error;
+
+    private String message;
 
     public String getMessage() {
         return message;
@@ -15,14 +15,7 @@ public class Move {
         this.message = message;
     }
 
-    private String message;
-    public Boolean getError() {
-        return error;
-    }
-
-    public void setError(Boolean error) {
-        this.error = error;
-    }
+    private String command;
 
     public String getCommand() {
         return command;
