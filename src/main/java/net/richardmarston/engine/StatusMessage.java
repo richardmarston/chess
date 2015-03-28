@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 /**
  * @startuml
- * class StatusMessage {
+ * class engine.StatusMessage {
+ * -ArrayList<String> engineOutputLines
  * +boolean invalidMove()
  * +boolean whiteMate()
  * +boolean blackMate()

@@ -12,10 +12,12 @@ import static java.lang.Thread.sleep;
 
 /**
  * @startuml
- * EngineIO --* BufferedReader
- * EngineIO --* BufferedWriter
- * EngineIO --* Process
- * EngineIO --* "ConcurrentLinkedDeque<StatusMessages>"
+ * class engine.EngineIO {
+ *     BufferedReader reader
+ *     BufferedWriter writer
+ *     Process engineProcess
+ *     ConcurrentLinkedDeque<engine.StatusMessage>
+ * }
  * @enduml
  * Created by rich on 27/03/15.
  */

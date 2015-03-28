@@ -16,6 +16,19 @@ import org.springframework.web.bind.support.SessionStatus;
 import java.util.ArrayList;
 
 /**
+ * @startuml
+ * controller.ChessController -right> view.Messages
+ * controller.ChessController -right> "view.View Templates (JSP)"
+ * controller.ChessController -right-* model.Board
+ * controller.ChessController -right-* model.Move
+ * controller.ChessController -up|> springframework.web.servlet.DispatcherServlet
+ * controller.ChessController -left-* engine.ChessEngine
+ * class controller.ChessController {
+ *     +requestChessForm()
+ *     +processMoveForm()
+ * }
+ * hide springframework.web.servlet.DispatcherServlet members
+ * @enduml
  * Created by rich on 25/03/15.
  */
 

@@ -1,6 +1,12 @@
 package net.richardmarston.model;
 
 /**
+ * @startuml
+ * class model.Move {
+ *     String requestToUser
+ *     String commandFromUser
+ * }
+ * @enduml
  * Created by rich on 26/03/15.
  */
 public class Move {

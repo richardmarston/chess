@@ -10,10 +10,12 @@ import org.apache.log4j.Logger;
 
 /**
  * @startuml
- * ChessEngine --* EngineIO
- * class ChessEngine {
- *     Thread readThread
- *     ArrayList<String> currentBoard
+ * engine.ChessEngine --* engine.EngineIO
+ * class engine.ChessEngine {
+ *     -Thread readThread
+ *     -ArrayList<String> currentBoard
+ *     +validateMove()
+ *     +close()
  * }
  * @enduml
  * Created by rich on 23/03/15.

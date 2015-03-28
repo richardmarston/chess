@@ -8,6 +8,13 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
+ * @startuml
+ * class model.Board {
+ *     ArrayList<ArrayList<String>> board
+ *     +setState(ArrayList<String>)
+ *     +getBoardAsStrings()
+ * }
+ * @enduml
  * Created by rich on 25/03/15.
  */
 public class Board {
