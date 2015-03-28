@@ -3,9 +3,7 @@ package net.richardmarston.engine;
 import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static java.lang.Thread.sleep;
@@ -105,9 +103,6 @@ public class EngineIO implements Runnable {
         }
     }
 
-    private synchronized void addToDeque(StatusMessage message) {
-        replies.addLast(message);
-    }
 
     @Override
     public void run() {
@@ -117,14 +112,18 @@ public class EngineIO implements Runnable {
             if (message != null && message.isBeginningOfBoardUpdate()) {
                 readLinesFromEngine(message, 10);
             }
-            addToDeque(message);
+            addReplyToQueue(message);
         }
         logger.info("Read thread is exiting because - isInterrupted: ("+
                 Thread.currentThread().isInterrupted()+
                 ") processComplete: ("+processComplete+")");
     }
 
-    public synchronized StatusMessage getNextReply() {
+    private synchronized void addReplyToQueue(StatusMessage message) {
+        replies.addLast(message);
+    }
+
+    protected synchronized StatusMessage getReplyFromQueue() {
         StatusMessage reply;
         try {
             reply = replies.removeFirst();

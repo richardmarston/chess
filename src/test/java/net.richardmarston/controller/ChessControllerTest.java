@@ -1,6 +1,6 @@
 package net.richardmarston.controller;
 
-import net.richardmarston.BoardSamples;
+import net.richardmarston.model.BoardSamples;
 import net.richardmarston.engine.ChessEngine;
 import net.richardmarston.model.*;
 import org.apache.log4j.Logger;

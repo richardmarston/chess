@@ -51,7 +51,7 @@ public class ChessEngine {
     private MoveResult waitForReply() {
         StatusMessage nextReply;
         MoveResult moveResult = MoveResult.OK;
-        while((nextReply = engineIO.getNextReply()) == null) {
+        while((nextReply = engineIO.getReplyFromQueue()) == null) {
             try {
                 sleep(100);
             }
