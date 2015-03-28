@@ -49,7 +49,7 @@ public class ChessEngine {
 
     }
 
-    public MoveResult waitForReply() {
+    private MoveResult waitForReply() {
         StatusMessage nextReply;
         MoveResult moveResult = MoveResult.OK;
         while((nextReply = engineIO.getNextReply()) == null) {
@@ -87,9 +87,9 @@ public class ChessEngine {
         return moveResult == MoveResult.BlackMate || moveResult == MoveResult.WhiteMate;
     }
 
-    public MoveResult validate(Move move) {
-        logger.info("Move attempted: " + move.getCommand());
-        engineIO.sendCommand(move.getCommand());
+    public MoveResult validateMove(Move move) {
+        logger.info("Move attempted: " + move.getCommandFromUser());
+        engineIO.sendCommand(move.getCommandFromUser());
         MoveResult validMove = waitForReply(); // this will be the reply to sendCommand, either OK or Invalid
         engineIO.getCurrentBoard();
         MoveResult boardUpdateReply = waitForReply(); // this will be the board or an indication that someone has won.
@@ -102,7 +102,7 @@ public class ChessEngine {
         }
     }
 
-    public static MoveResult parseResponse(StatusMessage response)
+    private static MoveResult parseResponse(StatusMessage response)
     {
         if (response.OK()) {
             return MoveResult.OK;

@@ -52,10 +52,9 @@ public class ChessController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String requestChessForm(ModelMap model) {
-
         Move move = new Move();
-        move.setCommand("");
-        move.setMessage("Enter your move!");
+        move.setCommandFromUser("");
+        move.setRequestToUser("Enter your move!");
         model.addAttribute("board", getBoard());
         model.addAttribute("move", move);
         return "chess"; // will map to chess.jsp
@@ -63,9 +62,9 @@ public class ChessController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String processCreationForm(ModelMap model, @ModelAttribute("move") Move move, BindingResult result, SessionStatus status) {
-        ChessEngine.MoveResult chessResult = engine.validate(move);
+        ChessEngine.MoveResult chessResult = engine.validateMove(move);
         String message = Messages.getMessage(chessResult);
-        move.setMessage(message);
+        move.setRequestToUser(message);
         if (chessResult != ChessEngine.MoveResult.Invalid) {
             this.gameService.saveMove(move);
         }

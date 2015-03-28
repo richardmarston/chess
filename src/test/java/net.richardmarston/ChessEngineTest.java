@@ -37,8 +37,8 @@ public class ChessEngineTest {
         try {
             engine = new ChessEngine();
             Move move = new Move();
-            move.setCommand("q1");
-            assertTrue(engine.validate(move) == ChessEngine.MoveResult.Invalid);
+            move.setCommandFromUser("q1");
+            assertTrue(engine.validateMove(move) == ChessEngine.MoveResult.Invalid);
         }
         finally {
             engine.close();

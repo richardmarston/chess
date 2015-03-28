@@ -46,17 +46,17 @@ public class ChessControllerTest {
     public void processCreationFormCallsValidate() {
         Board board = new Board();
         Move move = new Move();
-        when(mockChessEngine.validate(any(Move.class))).thenReturn(ChessEngine.MoveResult.OK);
+        when(mockChessEngine.validateMove(any(Move.class))).thenReturn(ChessEngine.MoveResult.OK);
         String s = controller.processCreationForm(new ModelMap(), new Move(), mockBindingResult, mockSessionStatus );
-        verify(mockChessEngine).validate(any(Move.class));
+        verify(mockChessEngine).validateMove(any(Move.class));
     }
 
     @Test
     public void processCreationFormCallsSaveMoveIfValidationPasses() {
         Board board = new Board();
-        when(mockChessEngine.validate(any(Move.class))).thenReturn(ChessEngine.MoveResult.OK);
+        when(mockChessEngine.validateMove(any(Move.class))).thenReturn(ChessEngine.MoveResult.OK);
         String s = controller.processCreationForm(new ModelMap(), new Move(), mockBindingResult, mockSessionStatus );
-        verify(mockChessEngine).validate(any(Move.class));
+        verify(mockChessEngine).validateMove(any(Move.class));
         verify(mockGameService).saveMove(any(Move.class));
         verify(mockSessionStatus).setComplete();
     }
@@ -64,9 +64,9 @@ public class ChessControllerTest {
     @Test
     public void processCreationFormDoesNotCallSaveMoveIfValidationFails() {
         Board board = new Board();
-        when(mockChessEngine.validate(any(Move.class))).thenReturn(ChessEngine.MoveResult.Invalid);
+        when(mockChessEngine.validateMove(any(Move.class))).thenReturn(ChessEngine.MoveResult.Invalid);
         String s = controller.processCreationForm(new ModelMap(), new Move(), mockBindingResult, mockSessionStatus );
-        verify(mockChessEngine).validate(any(Move.class));
+        verify(mockChessEngine).validateMove(any(Move.class));
         verify(mockGameService, times(0)).saveMove(any(Move.class));
     }
 }

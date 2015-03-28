@@ -11,23 +11,23 @@ package net.richardmarston.model;
  */
 public class Move {
 
-    private String message;
+    private String requestToUser;
 
-    public String getMessage() {
-        return message;
+    public String getRequestToUser() {
+        return requestToUser;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setRequestToUser(String requestToUser) {
+        this.requestToUser = requestToUser;
     }
 
-    private String command;
+    private String commandFromUser;
 
-    public String getCommand() {
-        return command;
+    public String getCommandFromUser() {
+        return commandFromUser;
     }
 
-    public void setCommand(String command) {
-        this.command = command;
+    public void setCommandFromUser(String commandFromUser) {
+        this.commandFromUser = commandFromUser;
     }
 }
