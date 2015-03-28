@@ -3,22 +3,37 @@ package net.richardmarston.engine;
 import java.util.ArrayList;
 
 /**
+ * @startuml
+ * class StatusMessage {
+ * +boolean invalidMove()
+ * +boolean whiteMate()
+ * +boolean blackMate()
+ * +boolean OK()
+ * +boolean boardUpdate()
+ * }
+ * @enduml
  * Created by rich on 27/03/15.
  */
 public class StatusMessage {
 
+    private ArrayList<String> textLines;
+
     public StatusMessage() {
         textLines = new ArrayList<String>();
     }
-    public ArrayList<String> getTextLines() {
+
+    protected ArrayList<String> getTextLines() {
         return textLines;
+    }
+
+    public Boolean isBeginningOfBoardUpdate() {
+        return (textLines != null && textLines.size() > 0 && textLines.get(0).equals(""));
     }
 
     public void addTextLine(String textLine) {
         textLines.add(textLine);
     }
 
-    ArrayList<String> textLines;
 
     public Boolean invalidMove() {
         return textLines.get(0).contains("Invalid");

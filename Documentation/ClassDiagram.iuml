@@ -1,0 +1,5 @@
+ @startuml
+ !include ../src/main/java/net/richardmarston/engine/EngineIO.java
+ !include ../src/main/java/net/richardmarston/engine/ChessEngine.java
+ !include ../src/main/java/net/richardmarston/engine/StatusMessage.java
+ @enduml

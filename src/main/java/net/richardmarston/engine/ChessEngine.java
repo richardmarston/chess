@@ -9,13 +9,19 @@ import net.richardmarston.model.Move;
 import org.apache.log4j.Logger;
 
 /**
+ * @startuml
+ * ChessEngine --* EngineIO
+ * class ChessEngine {
+ *     Thread readThread
+ *     ArrayList<String> currentBoard
+ * }
+ * @enduml
  * Created by rich on 23/03/15.
  */
 public class ChessEngine {
 
     private EngineIO engineIO;
     private ArrayList<String> currentBoard;
-    private MoveResult moveResult;
     private Thread readThread;
 
     static Logger logger = Logger.getLogger(ChessEngine.class);
@@ -30,7 +36,6 @@ public class ChessEngine {
 
     public ChessEngine() {
         engineIO = new EngineIO();
-        moveResult = MoveResult.OK;
         readThread = new Thread(engineIO);
         readThread.start();
         engineIO.getCurrentBoard();
@@ -42,8 +47,9 @@ public class ChessEngine {
 
     }
 
-    public void waitForReply() {
+    public MoveResult waitForReply() {
         StatusMessage nextReply;
+        MoveResult moveResult = MoveResult.OK;
         while((nextReply = engineIO.getNextReply()) == null) {
             try {
                 sleep(100);
@@ -62,6 +68,7 @@ public class ChessEngine {
             currentBoard = nextReply.getTextLines();
         }
         logger.info("moveResult: "+ moveResult);
+        return moveResult;
     }
 
     /* For mocking & testing */
@@ -74,25 +81,23 @@ public class ChessEngine {
         return currentBoard;
     }
 
-    public void checkForReply() {
-        StatusMessage nextReply;
-        while((nextReply = engineIO.getNextReply()) != null){
-            logger.info("Result was: [" + nextReply.getTextLines() + "]");
-            parseResponse(nextReply);
-        }
-        logger.info("nextReply: "+nextReply + " moveResult: "+ moveResult);
+    public Boolean gameOver(MoveResult moveResult) {
+        return moveResult == MoveResult.BlackMate || moveResult == MoveResult.WhiteMate;
     }
 
     public MoveResult validate(Move move) {
         logger.info("Move attempted: " + move.getCommand());
         engineIO.sendCommand(move.getCommand());
-        waitForReply(); // this will be the reply to sendCommand, either OK or Invalid
+        MoveResult validMove = waitForReply(); // this will be the reply to sendCommand, either OK or Invalid
         engineIO.getCurrentBoard();
-        waitForReply(); // this will be the board or an indication that someone has won.
-        if (moveResult == MoveResult.BlackMate || moveResult == MoveResult.WhiteMate){
+        MoveResult boardUpdateReply = waitForReply(); // this will be the board or an indication that someone has won.
+        if (gameOver(boardUpdateReply)) {
             waitForReply(); // when someone has won we have to wait again for the board.
+            return boardUpdateReply;
         }
-        return moveResult;
+        else {
+            return validMove;
+        }
     }
 
     public static MoveResult parseResponse(StatusMessage response)

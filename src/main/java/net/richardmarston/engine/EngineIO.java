@@ -11,13 +11,18 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import static java.lang.Thread.sleep;
 
 /**
+ * @startuml
+ * EngineIO --* BufferedReader
+ * EngineIO --* BufferedWriter
+ * EngineIO --* Process
+ * EngineIO --* "ConcurrentLinkedDeque<StatusMessages>"
+ * @enduml
  * Created by rich on 27/03/15.
  */
 public class EngineIO implements Runnable {
 
     static Logger logger = Logger.getLogger(EngineIO.class);
 
-    private InputStream readInputStream = null;
     private BufferedReader reader = null;
     private BufferedWriter writer = null;
     private Process engineProcess = null;
@@ -28,12 +33,12 @@ public class EngineIO implements Runnable {
         replies = new ConcurrentLinkedDeque<StatusMessage>();
         logger.debug("Starting new chess engine process.");
         ProcessBuilder pb = new ProcessBuilder()
-                .command("/usr/local/bin/gnuchess", "--manual", "--xboard")
+                .command("/usr/local/bin/gnuchess", "--xboard")
                 .redirectErrorStream(true);
         try
         {
             engineProcess = pb.start();
-            readInputStream = engineProcess.getInputStream();
+            InputStream readInputStream = engineProcess.getInputStream();
             OutputStream outputStream = engineProcess.getOutputStream();
             reader = new BufferedReader(new InputStreamReader(readInputStream));
             writer = new BufferedWriter(new OutputStreamWriter(outputStream));
@@ -101,11 +106,10 @@ public class EngineIO implements Runnable {
         while(!Thread.currentThread().isInterrupted() && !processComplete) {
             StatusMessage message = new StatusMessage();
             readLinesFromEngine(message, 1);
-            if (message != null && message.getTextLines() != null && message.getTextLines().size() > 0 && message.getTextLines().get(0).equals("")) {
+            if (message != null && message.isBeginningOfBoardUpdate()) {
                 readLinesFromEngine(message, 10);
             }
             addToDeque(message);
-            logger.info("Added to replies: "+message.getTextLines());
         }
         logger.info("Read thread is exiting because - isInterrupted: ("+
                 Thread.currentThread().isInterrupted()+
