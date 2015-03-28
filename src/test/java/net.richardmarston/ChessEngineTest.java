@@ -1,17 +1,18 @@
 package net.richardmarston;
 
 import net.richardmarston.engine.ChessEngine;
-import net.richardmarston.engine.EngineIO;
+import static net.richardmarston.engine.ChessEngine.MoveResult;
 import net.richardmarston.engine.StatusMessage;
 import net.richardmarston.model.Move;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static org.mockito.Mockito.*;
 
@@ -82,27 +83,55 @@ public class ChessEngineTest {
     public void canParseBoardReplyInvalid() {
         StatusMessage message = mock(StatusMessage.class);
         when(message.invalidMove()).thenReturn(true);
-        assertTrue(ChessEngine.parseResponse(message) == ChessEngine.MoveResult.Invalid);
+        ChessEngine engine = mock(ChessEngine.class);
+        try {
+            Method parseResponseReflection = engine.getClass().getDeclaredMethod("parseResponse", new Class<?>[0]);
+            assertTrue(parseResponseReflection.invoke(message) == ChessEngine.MoveResult.Invalid);
+        }
+        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            logger.error("Could not run method \"parseResponse\" in ChessEngine class.");
+        }
     }
 
     @Test
     public void canParseBoardReplyOK() {
         StatusMessage message = mock(StatusMessage.class);
         when(message.OK()).thenReturn(true);
-        assertTrue(ChessEngine.parseResponse(message) == ChessEngine.MoveResult.OK);
+        ChessEngine engine = mock(ChessEngine.class);
+        try {
+            Method parseResponseReflection = engine.getClass().getDeclaredMethod("parseResponse", new Class<?>[0]);
+            assertTrue(parseResponseReflection.invoke(message) == MoveResult.OK);
+        }
+        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            logger.error("Could not run method \"parseResponse\" in ChessEngine class.");
+        }
     }
 
     @Test
     public void canParseBoardReplyBlackMate() {
         StatusMessage message = mock(StatusMessage.class);
         when(message.blackMate()).thenReturn(true);
-        assertTrue(ChessEngine.parseResponse(message) == ChessEngine.MoveResult.BlackMate);
+        ChessEngine engine = mock(ChessEngine.class);
+        try {
+            Method parseResponseReflection = engine.getClass().getDeclaredMethod("parseResponse", new Class<?>[0]);
+            assertTrue(parseResponseReflection.invoke(message) == MoveResult.BlackMate);
+        }
+        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            logger.error("Could not run method \"parseResponse\" in ChessEngine class.");
+        }
     }
 
     @Test
     public void canParseBoardReplyWhiteMate() {
         StatusMessage message = mock(StatusMessage.class);
         when(message.whiteMate()).thenReturn(true);
-        assertTrue(ChessEngine.parseResponse(message) == ChessEngine.MoveResult.WhiteMate);
+        ChessEngine engine = mock(ChessEngine.class);
+        try {
+            Method parseResponseReflection = engine.getClass().getDeclaredMethod("parseResponse", new Class<?>[0]);
+            assertTrue(parseResponseReflection.invoke(message) == MoveResult.WhiteMate);
+        }
+        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            logger.error("Could not run method \"parseResponse\" in ChessEngine class.");
+        }
     }
 }

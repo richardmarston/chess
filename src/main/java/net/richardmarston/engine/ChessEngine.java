@@ -1,6 +1,5 @@
 package net.richardmarston.engine;
 
-import java.io.*;
 import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
