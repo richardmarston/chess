@@ -13,8 +13,8 @@ import org.apache.log4j.Logger;
  * class engine.ChessEngine {
  *     -Thread readThread
  *     -ArrayList<String> currentBoard
- *     +validateMove()
- *     +close()
+ *     +MoveResult validateMove(Move)
+ *     +void close()
  * }
  * @enduml
  * Created by rich on 23/03/15.

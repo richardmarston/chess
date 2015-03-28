@@ -1,4 +1,4 @@
-package net.richardmarston;
+package net.richardmarston.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;

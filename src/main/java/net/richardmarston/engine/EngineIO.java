@@ -17,7 +17,13 @@ import static java.lang.Thread.sleep;
  *     BufferedWriter writer
  *     Process engineProcess
  *     ConcurrentLinkedDeque<engine.StatusMessage>
+ *     -synchronized addReplyToQueue(StatusMessage)
+ *     #synchronized StatusMessage getReplyFromQueue()
+ *     #sendCommand(String)
  * }
+ * interface Runnable
+ * engine.EngineIO -right-|> Runnable
+ * hide Runnable members
  * @enduml
  * Created by rich on 27/03/15.
  */

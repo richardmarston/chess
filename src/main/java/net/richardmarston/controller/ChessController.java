@@ -21,13 +21,14 @@ import java.util.ArrayList;
  * controller.ChessController -right> "view.View Templates (JSP)"
  * controller.ChessController -right-* model.Board
  * controller.ChessController -right-* model.Move
- * controller.ChessController -up|> springframework.web.servlet.DispatcherServlet
- * controller.ChessController -left-* engine.ChessEngine
+ * controller.ChessController -down-|> springframework.web.servlet.DispatcherServlet
+ * controller.ChessController -right-* engine.ChessEngine
  * class controller.ChessController {
  *     +requestChessForm()
  *     +processMoveForm()
  * }
  * hide springframework.web.servlet.DispatcherServlet members
+ * hide controller.ChessController fields
  * @enduml
  * Created by rich on 25/03/15.
  */

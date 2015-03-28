@@ -1,8 +1,7 @@
-package net.richardmarston;
+package net.richardmarston.engine;
 
-import net.richardmarston.engine.ChessEngine;
 import static net.richardmarston.engine.ChessEngine.MoveResult;
-import net.richardmarston.engine.StatusMessage;
+
 import net.richardmarston.model.Move;
 import org.apache.log4j.Logger;
 import org.junit.Test;

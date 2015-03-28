@@ -3,9 +3,10 @@ package net.richardmarston.model;
 /**
  * @startuml
  * class model.Move {
- *     String requestToUser
- *     String commandFromUser
+ *     -String requestToUser
+ *     -String commandFromUser
  * }
+ * hide model.Move methods
  * @enduml
  * Created by rich on 26/03/15.
  */

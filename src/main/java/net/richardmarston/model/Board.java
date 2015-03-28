@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 /**
  * @startuml
  * class model.Board {
- *     ArrayList<ArrayList<String>> board
+ *     -ArrayList<ArrayList<String>> board
  *     +setState(ArrayList<String>)
  *     +getBoardAsStrings()
  * }

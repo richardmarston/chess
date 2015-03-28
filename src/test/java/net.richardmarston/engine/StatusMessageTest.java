@@ -1,4 +1,4 @@
-package net.richardmarston;
+package net.richardmarston.engine;
 
 import net.richardmarston.engine.StatusMessage;
 import org.junit.Test;

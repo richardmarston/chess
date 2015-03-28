@@ -1,6 +1,5 @@
-package net.richardmarston;
+package net.richardmarston.model;
 
-import net.richardmarston.model.Board;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 

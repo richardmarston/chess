@@ -1,4 +1,5 @@
 @startuml
+ title UML Diagram of Chess Website
  !include ../src/main/java/net/richardmarston/engine/EngineIO.java
  !include ../src/main/java/net/richardmarston/engine/ChessEngine.java
  !include ../src/main/java/net/richardmarston/engine/StatusMessage.java
