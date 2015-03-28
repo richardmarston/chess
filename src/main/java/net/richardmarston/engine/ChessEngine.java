@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
+
+import net.richardmarston.model.Move;
 import org.apache.log4j.Logger;
 
 /**
@@ -11,98 +13,113 @@ import org.apache.log4j.Logger;
  */
 public class ChessEngine {
 
+    private EngineIO engineIO;
+    private ArrayList<String> currentBoard;
+    private MoveResult moveResult;
+    private Thread readThread;
+
     static Logger logger = Logger.getLogger(ChessEngine.class);
-    private static final int TIMEOUT = 3000;
-    ArrayList<String> resultOfLastCommand;
-    InputStream readInputStream = null;
-    BufferedReader reader = null;
-    BufferedWriter writer = null;
-    Process engineProcess = null;
 
-    public String getResultOfLastCommand() {
-        return resultOfLastCommand.get(0);
-    }
-
-    public ArrayList<String> getCurrentBoard() {
-        sendCommand("show board", 11);
-        return resultOfLastCommand;
+    public enum MoveResult {
+        Invalid,
+        BlackMate,
+        WhiteMate,
+        UpdateBoard,
+        OK
     }
 
     public ChessEngine() {
-        resultOfLastCommand = new ArrayList<String>();
-        logger.debug("Starting new chess engine process.");
-        ProcessBuilder pb = new ProcessBuilder()
-        .command("/usr/local/bin/gnuchess", "--manual", "--xboard")
-        .redirectErrorStream(true);
-        try
-        {
-            engineProcess = pb.start();
-            readInputStream = engineProcess.getInputStream();
-            OutputStream outputStream = engineProcess.getOutputStream();
-            reader = new BufferedReader (new InputStreamReader(readInputStream));
-            writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-            waitForResponse(1);
+        engineIO = new EngineIO();
+        moveResult = MoveResult.OK;
+        readThread = new Thread(engineIO);
+        readThread.start();
+        engineIO.getCurrentBoard();
+        waitForReply(); // this should be "Chess"
+        waitForReply(); // this should be the board update
+    }
+
+    public ChessEngine(Boolean dontstart){
+
+    }
+
+    public void waitForReply() {
+        StatusMessage nextReply;
+        while((nextReply = engineIO.getNextReply()) == null) {
+            try {
+                sleep(100);
+            }
+            catch(InterruptedException ie) {
+                // oh no
+            }
         }
-        catch (java.io.IOException ioe) {
-            System.out.print(ioe.getMessage());
+        logger.info("Result was: [" + nextReply.getTextLines() + "]");
+        MoveResult result;
+        if ((result = parseResponse(nextReply)) != MoveResult.UpdateBoard){
+            moveResult = result;
+        }
+        else {
+            logger.info("UPDATING BOARD");
+            currentBoard = nextReply.getTextLines();
+        }
+        logger.info("moveResult: "+ moveResult);
+    }
+
+    /* For mocking & testing */
+    public ChessEngine(EngineIO eio) {
+        this();
+        engineIO = eio;
+    }
+
+    public ArrayList<String> getCurrentBoard() {
+        return currentBoard;
+    }
+
+    public void checkForReply() {
+        StatusMessage nextReply;
+        while((nextReply = engineIO.getNextReply()) != null){
+            logger.info("Result was: [" + nextReply.getTextLines() + "]");
+            parseResponse(nextReply);
+        }
+        logger.info("nextReply: "+nextReply + " moveResult: "+ moveResult);
+    }
+
+    public MoveResult validate(Move move) {
+        logger.info("Move attempted: " + move.getCommand());
+        engineIO.sendCommand(move.getCommand());
+        waitForReply(); // this will be the reply to sendCommand, either OK or Invalid
+        engineIO.getCurrentBoard();
+        waitForReply(); // this will be the board or an indication that someone has won.
+        if (moveResult == MoveResult.BlackMate || moveResult == MoveResult.WhiteMate){
+            waitForReply(); // when someone has won we have to wait again for the board.
+        }
+        return moveResult;
+    }
+
+    public static MoveResult parseResponse(StatusMessage response)
+    {
+        if (response.OK()) {
+            return MoveResult.OK;
+        }
+        else if (response.boardUpdate()) {
+            return MoveResult.UpdateBoard;
+        }
+        else if (response.invalidMove()) {
+            return MoveResult.Invalid;
+        }
+        else if (response.whiteMate()) {
+            return MoveResult.WhiteMate;
+        }
+        else if (response.blackMate()) {
+            return MoveResult.BlackMate;
+        }
+        else {
+            logger.error("Could not parse response: "+response.getTextLines());
+            return MoveResult.Invalid;
         }
     }
 
     public void close() {
-        logger.debug("Shutting down engine.");
-        try {
-            engineProcess.destroy();
-        }
-        catch (NullPointerException npe) {
-
-        }
-    }
-
-    public void sendCommand(String command) {
-        sendCommand(command, 1);
-    }
-
-    public void sendCommand(String command, Integer responseLines) {
-        logger.debug("Sending command: " + command);
-        try {
-            writer.write(command + "\n");
-            writer.flush();
-            writer.flush();
-        }
-        catch (java.io.IOException ioe) {
-            System.out.print(ioe.getMessage());
-        }
-        waitForResponse(responseLines);
-    }
-
-    private boolean waitForResponse(Integer lines) {
-        resultOfLastCommand.clear();
-        try {
-            String nextLine="uninitialized";
-            while (true) {
-
-                if ((nextLine = reader.readLine()) != null) {
-                    // successful read!
-                    resultOfLastCommand.add(nextLine);
-                    if (0 >= --lines) {
-                        return true;
-                    }
-                }
-                giveEngineProcessingTime();
-            }
-        }
-        catch (IOException ioe) {
-            System.out.print(ioe.getMessage());
-            return false;
-        }
-    }
-
-    private void giveEngineProcessingTime(){
-        try {
-            sleep(50);
-        }
-        catch (InterruptedException e) {
-
-        }
+        engineIO.close();
+        readThread.interrupt();
     }
 }

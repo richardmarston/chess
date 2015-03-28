@@ -16,9 +16,6 @@
 
     <bean id="gameService" class="net.richardmarston.model.GameService"/>
     <bean id="chessEngine" class="net.richardmarston.engine.ChessEngine"/>
-    <bean id="moveValidator" class="net.richardmarston.model.MoveValidator">
-        <constructor-arg ref="chessEngineComms" />
-    </bean>
 
 
 </beans>

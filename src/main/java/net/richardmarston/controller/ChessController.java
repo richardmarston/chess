@@ -2,6 +2,7 @@ package net.richardmarston.controller;
 
 import net.richardmarston.engine.ChessEngine;
 import net.richardmarston.model.*;
+import net.richardmarston.view.Messages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,13 +26,11 @@ public class ChessController {
     static Logger logger = Logger.getLogger(ChessController.class);
 
     private GameService gameService;
-    private MoveValidator moveValidator;
     private ChessEngine engine;
     private Board board;
 
     @Autowired
-    public ChessController(MoveValidator validator, GameService service, ChessEngine ce) {
-        moveValidator = validator;
+    public ChessController(GameService service, ChessEngine ce) {
         gameService = service;
         engine = ce;
         board = new Board();
@@ -42,7 +41,7 @@ public class ChessController {
     public String requestChessForm(ModelMap model) {
 
         Move move = new Move();
-        move.setCommand("changeme");
+        move.setCommand("");
         move.setMessage("Enter your move!");
         model.addAttribute("board", getBoard());
         model.addAttribute("move", move);
@@ -51,22 +50,16 @@ public class ChessController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String processCreationForm(ModelMap model, @ModelAttribute("move") Move move, BindingResult result, SessionStatus status) {
-        moveValidator.validate(move, result);
-        if (result.hasErrors()) {
-            move.setMessage("Invalid move. Please try again!");
-            model.addAttribute("move", move);
-            model.addAttribute("board", getBoard());
-            return "chess";
-        } else {
-            logger.info("Move complete: "+move.getCommand());
-
+        ChessEngine.MoveResult chessResult = engine.validate(move);
+        String message = Messages.getMessage(chessResult);
+        move.setMessage(message);
+        if (chessResult != ChessEngine.MoveResult.Invalid) {
             this.gameService.saveMove(move);
-            move.setMessage("Enter your move!");
-            board.setState(engine.getCurrentBoard());
-            model.addAttribute("board", getBoard());
-            status.setComplete();
-            return "chess";
         }
+        board.setState(engine.getCurrentBoard());
+        model.addAttribute("board", getBoard());
+        status.setComplete();
+        return "chess";
     }
 
     private ArrayList<ArrayList<String>> getBoard() {
