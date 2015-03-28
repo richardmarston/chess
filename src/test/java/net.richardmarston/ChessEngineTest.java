@@ -1,6 +1,6 @@
 package net.richardmarston;
 
-import net.richardmarston.model.ChessEngineComms;
+import net.richardmarston.engine.ChessEngine;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -12,15 +12,15 @@ import java.util.Iterator;
 import static java.lang.Thread.sleep;
 
 
-public class ChessEngineCommsTest {
+public class ChessEngineTest {
 
-    static Logger logger = Logger.getLogger(ChessEngineCommsTest.class);
+    static Logger logger = Logger.getLogger(ChessEngineTest.class);
 
     @Test
     public void commsCanStartGnuChess() {
-        ChessEngineComms comms = null;
+        ChessEngine comms = null;
         try {
-            comms = new ChessEngineComms();
+            comms = new ChessEngine();
             assertTrue("Chess".equals(comms.getResultOfLastCommand()));
         }
         finally {
@@ -30,9 +30,9 @@ public class ChessEngineCommsTest {
 
     @Test
     public void commsCanDetectInvalidCommand() {
-        ChessEngineComms comms = null;
+        ChessEngine comms = null;
         try {
-            comms = new ChessEngineComms();
+            comms = new ChessEngine();
             comms.sendCommand("q1");
             assertTrue("Invalid move: q1".equals(comms.getResultOfLastCommand()));
         }
@@ -43,7 +43,7 @@ public class ChessEngineCommsTest {
 
     @Test
     public void newGameShowsNewBoard() {
-        ChessEngineComms comms = null;
+        ChessEngine comms = null;
         ArrayList<String> expectedState = new ArrayList<String>(Arrays.asList(
                 "",
                 "white  KQkq",
@@ -57,7 +57,7 @@ public class ChessEngineCommsTest {
                 "R N B Q K B N R "
                 ));
         try {
-            comms = new ChessEngineComms();
+            comms = new ChessEngine();
             ArrayList<String> gameState = comms.getCurrentBoard();
             Iterator<String> iterator = gameState.iterator();
             expectedState.forEach(line -> {

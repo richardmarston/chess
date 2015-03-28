@@ -1,5 +1,6 @@
 package net.richardmarston.controller;
 
+import net.richardmarston.engine.ChessEngine;
 import net.richardmarston.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +26,16 @@ public class ChessController {
 
     private GameService gameService;
     private MoveValidator moveValidator;
-    private ChessEngineComms comms;
+    private ChessEngine engine;
     private Board board;
 
     @Autowired
-    public ChessController(MoveValidator validator, GameService service, ChessEngineComms cec) {
+    public ChessController(MoveValidator validator, GameService service, ChessEngine ce) {
         moveValidator = validator;
         gameService = service;
-        comms = cec;
+        engine = ce;
         board = new Board();
-        board.setState(comms.getCurrentBoard());
+        board.setState(engine.getCurrentBoard());
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -61,7 +62,7 @@ public class ChessController {
 
             this.gameService.saveMove(move);
             move.setMessage("Enter your move!");
-            board.setState(comms.getCurrentBoard());
+            board.setState(engine.getCurrentBoard());
             model.addAttribute("board", getBoard());
             status.setComplete();
             return "chess";

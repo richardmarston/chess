@@ -1,4 +1,4 @@
-package net.richardmarston.model;
+package net.richardmarston.engine;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 /**
  * Created by rich on 23/03/15.
  */
-public class ChessEngineComms {
+public class ChessEngine {
 
-    static Logger logger = Logger.getLogger(ChessEngineComms.class);
+    static Logger logger = Logger.getLogger(ChessEngine.class);
     private static final int TIMEOUT = 3000;
     ArrayList<String> resultOfLastCommand;
     InputStream readInputStream = null;
@@ -28,7 +28,7 @@ public class ChessEngineComms {
         return resultOfLastCommand;
     }
 
-    public ChessEngineComms() {
+    public ChessEngine() {
         resultOfLastCommand = new ArrayList<String>();
         logger.debug("Starting new chess engine process.");
         ProcessBuilder pb = new ProcessBuilder()

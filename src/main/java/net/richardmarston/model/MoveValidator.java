@@ -1,5 +1,6 @@
 package net.richardmarston.model;
 
+import net.richardmarston.engine.ChessEngine;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -10,17 +11,17 @@ import org.springframework.validation.ObjectError;
 public class MoveValidator {
     static Logger logger = Logger.getLogger(MoveValidator.class);
 
-    ChessEngineComms comms;
+    ChessEngine engine;
 
-    public MoveValidator(ChessEngineComms cec) {
-        comms=cec;
+    public MoveValidator(ChessEngine cec) {
+        engine=cec;
     }
 
     public void validate(Move move, BindingResult result) {
         logger.debug("Move attempted: " + move.getCommand());
-        comms.sendCommand(move.getCommand());
-        logger.debug("Result was: [" + comms.getResultOfLastCommand() + "]");
-        if (comms.getResultOfLastCommand().contains("Invalid")) {
+        engine.sendCommand(move.getCommand());
+        logger.debug("Result was: [" + engine.getResultOfLastCommand() + "]");
+        if (engine.getResultOfLastCommand().contains("Invalid")) {
             result.addError(new ObjectError("Move", "Invalid move requested."));
         }
     }

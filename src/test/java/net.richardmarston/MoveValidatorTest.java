@@ -1,6 +1,6 @@
 package net.richardmarston;
 
-import net.richardmarston.model.ChessEngineComms;
+import net.richardmarston.engine.ChessEngine;
 import net.richardmarston.model.Move;
 import net.richardmarston.model.MoveValidator;
 import org.junit.Before;
@@ -15,15 +15,15 @@ import static org.mockito.Mockito.*;
  */
 public class MoveValidatorTest {
 
-    private ChessEngineComms mockChessEngineComms;
+    private ChessEngine mockChessEngine;
     private BindingResult mockBindingResult;
     private MoveValidator moveValidator;
 
     @Before
     public void setup() {
-        mockChessEngineComms = mock(ChessEngineComms.class);
+        mockChessEngine = mock(ChessEngine.class);
         mockBindingResult = mock(BindingResult.class);
-        moveValidator = new MoveValidator(mockChessEngineComms);
+        moveValidator = new MoveValidator(mockChessEngine);
     }
 
     @Test
@@ -31,8 +31,8 @@ public class MoveValidatorTest {
         Move move = new Move();
         String expectedResponse = "test command";
         move.setCommand(expectedResponse);
-        when(mockChessEngineComms.getResultOfLastCommand()).thenReturn(expectedResponse);
+        when(mockChessEngine.getResultOfLastCommand()).thenReturn(expectedResponse);
         moveValidator.validate(move, mockBindingResult);
-        verify(mockChessEngineComms).sendCommand(anyString());
+        verify(mockChessEngine).sendCommand(anyString());
     }
 }
