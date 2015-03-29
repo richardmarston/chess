@@ -21,17 +21,23 @@ import java.util.ArrayList;
  * controller.ChessController -right> "view.View Templates (JSP)"
  * controller.ChessController -right-* model.Board
  * controller.ChessController -right-* model.Move
- * controller.ChessController -down-|> springframework.web.servlet.DispatcherServlet
  * controller.ChessController -right-* engine.ChessEngine
  * class controller.ChessController {
  *     +requestChessForm()
  *     +processMoveForm()
  * }
+ * set namespaceSeparator none
+ * controller.ChessController -down-|> springframework.web.servlet.DispatcherServlet
+ * class springframework.web.servlet.DispatcherServlet {
+ * }
+ * set namespaceSeparator .
  * hide springframework.web.servlet.DispatcherServlet members
  * hide controller.ChessController fields
  * @enduml
  * Created by rich on 25/03/15.
  */
+/* set namespaceSeparator '*'*/
+/* set namespaceSeparator '.'*/
 
 @Controller
 @RequestMapping("/example")
