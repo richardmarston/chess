@@ -2,6 +2,8 @@ package net.richardmarston.controller;
 
 import net.richardmarston.engine.ChessEngine;
 import net.richardmarston.model.*;
+import net.richardmarston.repository.UserRepository;
+import net.richardmarston.service.ChessService;
 import net.richardmarston.view.Messages;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,25 +42,57 @@ import java.util.ArrayList;
 /* set namespaceSeparator '.'*/
 
 @Controller
-@RequestMapping("/example")
+@RequestMapping()
 public class ChessController {
 
     static Logger logger = Logger.getLogger(ChessController.class);
 
     private GameService gameService;
+    private ChessService chessService;
     private ChessEngine engine;
     private Board board;
 
     @Autowired
-    public ChessController(GameService service, ChessEngine ce) {
-        gameService = service;
-        engine = ce;
+    public ChessController(ChessService service) {
+        gameService = new GameService();
+        chessService = service;
+        engine = new ChessEngine();
         board = new Board();
         board.setState(engine.getCurrentBoard());
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String requestChessForm(ModelMap model) {
+    public ChessController(ChessService service, GameService game, ChessEngine ce) {
+        gameService = game;
+        engine = ce;
+        board = new Board();
+        board.setState(engine.getCurrentBoard());
+        chessService = service;
+    }
+
+        @RequestMapping(method = RequestMethod.GET, value="/login")
+    public String requestLoginForm(ModelMap model) {
+        User user = new User();
+        model.addAttribute("user", user);
+        model.addAttribute("message", Messages.getLoginMessage());
+        return "login";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value="/login")
+    public String submitLoginForm(ModelMap model, @ModelAttribute("user") User user, BindingResult result, SessionStatus status) {
+        if(chessService.findByName(user.getName()) != null){
+            logger.info("FOUND USER");
+        }
+        else {
+            logger.info("USER NOT FOUND, ADDING");
+            chessService.saveUser(user);
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("message", Messages.getLoginMessage());
+        return "login";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value="/game")
+    public String requestChessForm (ModelMap model) {
         Move move = new Move();
         move.setCommandFromUser("");
         move.setRequestToUser("Enter your move!");
@@ -67,7 +101,7 @@ public class ChessController {
         return "chess"; // will map to chess.jsp
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, value="/game")
     public String processCreationForm(ModelMap model, @ModelAttribute("move") Move move, BindingResult result, SessionStatus status) {
         ChessEngine.MoveResult chessResult = engine.validateMove(move);
         String message = Messages.getMessage(chessResult);

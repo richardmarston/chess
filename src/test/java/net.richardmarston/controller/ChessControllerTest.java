@@ -3,6 +3,8 @@ package net.richardmarston.controller;
 import net.richardmarston.model.BoardSamples;
 import net.richardmarston.engine.ChessEngine;
 import net.richardmarston.model.*;
+import net.richardmarston.repository.UserRepository;
+import net.richardmarston.service.ChessService;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +27,7 @@ public class ChessControllerTest {
     private SessionStatus mockSessionStatus;
     private GameService mockGameService;
     private ChessEngine mockChessEngine;
+    private ChessService mockChessService;
 
     @Before
     public void setup() {
@@ -32,8 +35,9 @@ public class ChessControllerTest {
         mockSessionStatus = mock(SessionStatus.class);
         mockGameService = mock(GameService.class);
         mockChessEngine = mock(ChessEngine.class);
+        mockChessService = mock(ChessService.class);
         when(mockChessEngine.getCurrentBoard()).thenReturn(BoardSamples.getStartingBoard());
-        controller = new ChessController(mockGameService, mockChessEngine);
+        controller = new ChessController(mockChessService, mockGameService, mockChessEngine);
     }
 
     @Test

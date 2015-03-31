@@ -23,10 +23,15 @@ import org.apache.log4j.Logger;
  */
 public class Messages {
     static Logger logger = Logger.getLogger(Messages.class);
+    private static final String pleaseLogin    = "Please enter your login name to sign in or register.";
+    private static final String enterMove      = "Enter your move!";
+    private static final String invalidMove    = "Invalid move. Please try again!";
     private static final String blackWins      = "Game complete. Black wins!";
     private static final String whiteWins      = "Game complete. White wins!";
-    private static final String invalidMove    = "Invalid move. Please try again!";
-    private static final String enterMove      = "Enter your move!";
+
+    public static String getLoginMessage() {
+        return pleaseLogin;
+    }
 
     public static String getMessage(ChessEngine.MoveResult moveResult) {
         switch (moveResult) {
