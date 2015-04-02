@@ -59,8 +59,8 @@ public class StatusMessage {
     public static Boolean isBoardUpdate(ArrayList<String> lines) {
         Boolean result = (lines.get(0).contains("") &&
                         lines.size() > 1 &&
-                        (lines.get(1).contains("white  KQkq") ||
-                        lines.get(1).contains("black  KQkq")));
+                        (lines.get(1).contains("white  ") ||
+                        lines.get(1).contains("black  ")));
         System.out.println("RESULT is " + result);
         return result;
     }

@@ -39,7 +39,7 @@ public class EngineIO implements Runnable {
         replies = new ConcurrentLinkedDeque<StatusMessage>();
         logger.debug("Starting new chess engine process.");
         ProcessBuilder pb = new ProcessBuilder()
-                .command("/usr/local/bin/gnuchess", "--xboard")
+                .command("/usr/local/bin/gnuchess", "--xboard", "--manual")
                 .redirectErrorStream(true);
         try
         {

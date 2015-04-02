@@ -48,11 +48,11 @@ public class Board {
      */
     public void setState(ArrayList<String> newBoard) {
         Iterator<ArrayList<String>> iterator = board.iterator();
+        List<String> toProcess = newBoard.subList(2,10);
         try {
-            newBoard.remove(0);
-            newBoard.remove(0); // todo: current player needs to be extracted from this field
-            newBoard.remove(newBoard.size()-1);
-            newBoard.forEach(line -> {
+            // todo: current player needs to be extracted from second field of newBoard
+            // todo: castling rights are also held in the KQkq part.
+            toProcess.forEach(line -> {
                 ArrayList<String> boardRow = iterator.next();
                 boardRow.clear();
                 IntStream.range(0, 8).forEach(

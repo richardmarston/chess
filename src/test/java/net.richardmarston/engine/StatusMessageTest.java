@@ -1,6 +1,8 @@
 package net.richardmarston.engine;
 
 import net.richardmarston.engine.StatusMessage;
+import net.richardmarston.model.BoardSamples;
+import net.richardmarston.model.BoardTest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -47,6 +49,20 @@ public class StatusMessageTest {
         message = new StatusMessage();
         message.addTextLine("");
         message.addTextLine("black  KQkq");
+        assertTrue(message.boardUpdate());
+    }
+
+    @Test
+    public void canParseNewBoardAsBoardUpdate() {
+        StatusMessage message = new StatusMessage();
+        BoardSamples.getStartingBoard().forEach(line -> message.addTextLine(line));
+        assertTrue(message.boardUpdate());
+    }
+
+    @Test
+    public void canParseQueenTopRowAsBoardUpdate() {
+        StatusMessage message = new StatusMessage();
+        BoardSamples.getQueenTopRowBoard().forEach(line->message.addTextLine(line));
         assertTrue(message.boardUpdate());
     }
 }

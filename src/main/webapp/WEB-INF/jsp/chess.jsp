@@ -14,14 +14,11 @@
 
     <form:form modelAttribute="move" method="post"
                class="form-horizontal">
-        <div class="control-group" id="command">
-            <label><c:out value="${move.message}"/>
+        <div class="control-group" id="displayUserRequest">
+            <label><c:out value="${move.requestToUser}"/>
             </label>
         <div class="controls">
-            <form:input path="command" action="submit"/>
-        </div>
-        <div class="controls">
-            <form:label path="message" />
+            <form:hidden path="commandFromUser" action="submit"/>
         </div>
         <div class="container">
             <jsp:include page="board.jsp"/>
