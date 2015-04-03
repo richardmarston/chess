@@ -115,6 +115,18 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <httpsPort>8443</httpsPort>
+		            <keystoreFile>/home/rich/keys/keystore</keystoreFile>
+		            <keystorePass>keypass</keystorePass>
+                    <clientAuth>false</clientAuth>
+                    <port>0</port>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
